@@ -1,0 +1,21 @@
+# Python ժամանակավոր ֆայլեր
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Վիրտուալ միջավայր
+venv/
+env/
+
+# Django-ի գաղտնիքներ և բազա
+.env
+db.sqlite3
+db.sqlite3-journal
+
+# Ստատիկ և մեդիա ֆայլեր
+staticfiles/
+media/
+
+# OS-ի ֆայլեր
+.DS_Store
+Thumbs.db
