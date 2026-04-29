@@ -1,110 +1,76 @@
 from django.contrib import admin
 from django.utils.html import format_html
-
+from django.templatetags.static import static
 from home.models import AboutUs, Chef, WhyChooseUs, ContactUs, FollowUs, Gallery, Events
 
-from django.templatetags.static import static
+# Global Admin Interface Customization
+admin.site.site_header = "Mystic Cloud Administration"
+admin.site.site_title = "Mystic Cloud Admin Portal"
+admin.site.index_title = "Welcome to the Control Panel"
 
 
-class AboutUsAdmin(admin.ModelAdmin):
-    list_display = ("title", "content", "thumbnail")
-    list_display_links = ("title",)
-    search_fields = ("title",)
+class BaseImageAdmin(admin.ModelAdmin):
+    """
+    Base class to provide a reusable thumbnail preview for models with images.
+    """
     readonly_fields = ("thumbnail",)
-    fieldsets = (
-        (
-            "GENERAL",
-            {"fields": ("title",)},
-        ),
-        (
-            "INFO",
-            {
-                "fields": (
-                    "content",
-                    ("image", "thumbnail"),
-                )
-            },
-        ),
-    )
 
-    @staticmethod
-    def thumbnail(obj):
+    @admin.display(description="Preview")
+    def thumbnail(self, obj):
+        if hasattr(obj, 'image') and obj.image:
+            url = obj.image.url
+        else:
+            url = static("img/no_image.jpg")
+
         return format_html(
-            "<img src='{}' class='thumbnail'>",
-            obj.image.url if obj.image else static("img/no_image.jpg"),
+            "<img src='{}' style='width: 50px; height: 50px; object-fit: cover; border-radius: 5px;'>",
+            url
         )
 
 
-class WhyChooseUsAdmin(admin.ModelAdmin):
+class AboutUsAdmin(BaseImageAdmin):
     list_display = ("title", "content", "thumbnail")
     list_display_links = ("title",)
     search_fields = ("title",)
-    readonly_fields = ("thumbnail",)
     fieldsets = (
-        (
-            "GENERAL",
-            {"fields": ("title",)},
-        ),
-        (
-            "INFO",
-            {
-                "fields": (
-                    "content",
-                    ("image", "thumbnail"),
-                )
-            },
-        ),
+        ("GENERAL INFORMATION", {"fields": ("title",)}),
+        ("CONTENT & MEDIA", {"fields": ("content", ("image", "thumbnail"))}),
     )
 
-    @staticmethod
-    def thumbnail(obj):
-        return format_html(
-            "<img src='{}' class='thumbnail'>",
-            obj.image.url if obj.image else static("img/no_image.jpg"),
-        )
+
+class WhyChooseUsAdmin(BaseImageAdmin):
+    list_display = ("title", "content", "thumbnail")
+    list_display_links = ("title",)
+    search_fields = ("title",)
+    fieldsets = (
+        ("PROMOTION DETAILS", {"fields": ("title",)}),
+        ("CONTENT & MEDIA", {"fields": ("content", ("image", "thumbnail"))}),
+    )
 
 
-class ChefAdmin(admin.ModelAdmin):
+class ChefAdmin(BaseImageAdmin):
     list_display = ("name", "bio", "thumbnail")
     list_display_links = ("name",)
     search_fields = ("name",)
-    readonly_fields = ("thumbnail",)
     fieldsets = (
-        (
-            "GENERAL",
-            {"fields": ("name",)},
-        ),
-        (
-            "INFO",
-            {
-                "fields": (
-                    "bio",
-                    ("image", "thumbnail"),
-                )
-            },
-        ),
+        ("PERSONAL INFO", {"fields": ("name",)}),
+        ("BIOGRAPHY & PHOTO", {"fields": ("bio", ("image", "thumbnail"))}),
     )
 
-    @staticmethod
-    def thumbnail(obj):
-        return format_html(
-            "<img src='{}' class='thumbnail'>",
-            obj.image.url if obj.image else static("img/no_image.jpg"),
-        )
 
-
+@admin.register(FollowUs)
 class FollowUsAdmin(admin.ModelAdmin):
     list_display = ('name', 'url')
 
 
+@admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ('address', 'phone_number', 'email', 'opening_hours')
 
 
+# Registering models to the admin site
 admin.site.register(AboutUs, AboutUsAdmin)
 admin.site.register(WhyChooseUs, WhyChooseUsAdmin)
 admin.site.register(Chef, ChefAdmin)
-admin.site.register(ContactUs, ContactUsAdmin)
-admin.site.register(FollowUs, FollowUsAdmin)
 admin.site.register(Gallery)
 admin.site.register(Events)
