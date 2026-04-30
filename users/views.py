@@ -1,5 +1,5 @@
 from django.contrib import messages
-from .mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -18,6 +18,7 @@ User = get_user_model()
 
 
 class RegistrationView(CreateView):
+    """Handle user registration and send activation email."""
     form_class = RegistrationForm
     model = User
     success_url = '/'
@@ -44,7 +45,7 @@ class RegistrationView(CreateView):
 
 
 class ValidateUserLink(TemplateView):
-
+    """Validate the activation token from the email link."""
     def get(self, request, *args, **kwargs):
         token = kwargs.get("token")
         pk = kwargs.get("pk")
@@ -57,28 +58,32 @@ class ValidateUserLink(TemplateView):
 
 
 class LoginView(Login):
+    """Standard login view."""
     pass
 
 
 class LogoutView(View):
+    """Log out the current user."""
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect(reverse('home:home'))
 
 
 class PasswordChangeDoneView(TemplateView):
-
+    """Redirect after successful password change."""
     def get(self, request, **kwargs):
         messages.success(request, "Password changed successfully!")
         return redirect("users:user_profile")
 
 
 class UserProfile(LoginRequiredMixin, DetailView):
+    """View to display the user's own profile using built-in mixin."""
     model = User
     template_name = "users/user_profile.html"
 
 
 class UserUpdate(LoginRequiredMixin, UpdateView):
+    """View to update user and profile details using built-in mixin."""
     model = User
     form_class = ProfileForm
 
@@ -87,6 +92,7 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
         return reverse("users:update_profile", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
+        # Update user data and then save profile fields
         result = super().form_valid(form)
         self.object.profile.country = form.cleaned_data["country"]
         self.object.profile.phone_number = form.cleaned_data["phone_number"]

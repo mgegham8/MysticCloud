@@ -10,7 +10,7 @@
 
         <div class="section-header">
             <h2>Chefs</h2>
-            <p>Our <span>Proffesional</span> Chefs</p>
+            <p>Our <span>Professional</span> Chefs</p>
         </div>
 
         <div class="row gy-4">
@@ -18,7 +18,14 @@
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                 <div class="chef-member">
                     <div class="member-img">
-                        <img src="{{ chef.image.url }}" class="img-fluid" alt="">
+                        {# Check if the chef has an image to avoid ValueError during tests #}
+                        {% if chef.image %}
+                            <img src="{{ chef.image.url }}" class="img-fluid" alt="{{ chef.name }}">
+                        {% else %}
+                            {# Fallback image if no file is uploaded #}
+                            <img src="/static/assets/img/default-chef.jpg" class="img-fluid" alt="Default">
+                        {% endif %}
+
                         <div class="social">
                             <a href=""><i class="bi bi-twitter"></i></a>
                             <a href=""><i class="bi bi-facebook"></i></a>

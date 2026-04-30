@@ -3,7 +3,6 @@ from django.utils.html import format_html
 from django.templatetags.static import static
 from menu.models import MenuItem, BarItem, Category, BarCategory, Hookah
 
-
 class BaseMenuAdmin(admin.ModelAdmin):
     """
     Base admin class to provide reusable thumbnail preview and common filters.
@@ -23,7 +22,6 @@ class BaseMenuAdmin(admin.ModelAdmin):
             url
         )
 
-
 class MenuItemAdmin(BaseMenuAdmin):
     list_display = ("name", "category", "price", "thumbnail")
     search_fields = ("name", "description")
@@ -39,7 +37,6 @@ class MenuItemAdmin(BaseMenuAdmin):
             )
         }),
     )
-
 
 class BarItemAdmin(BaseMenuAdmin):
     list_display = ("name", "category", "price", "thumbnail")
@@ -57,22 +54,18 @@ class BarItemAdmin(BaseMenuAdmin):
         }),
     )
 
-
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
-
 
 class BarCategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "category")
     search_fields = ("name",)
     list_filter = ("category",)
 
-
 class HookahAdmin(admin.ModelAdmin):
     list_display = ("name", "price")
     search_fields = ("name",)
-
 
 # Registering models to the admin site
 admin.site.register(MenuItem, MenuItemAdmin)

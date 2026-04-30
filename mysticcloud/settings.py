@@ -19,7 +19,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 
 # Allowed hosts for development and production (Render)
-ALLOWED_HOSTS = ['mysticcloud.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 # --- APPLICATION DEFINITION ---
 INSTALLED_APPS = [
     'django.contrib.admin',

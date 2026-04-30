@@ -60,7 +60,7 @@
                         <li><a href="{% url 'users:registration' %}">Register</a></li>
                         <li><a href="{% url 'users:login' %}">Login</a></li>
                         {% else %}
-                        <li><a href="{% url 'users:user_profile' request.user.id %}">Profile</a></li>
+                        <li><a href="{% url 'users:user_profile' %}">Profile</a></li>
                         <li><a href="{% url  'users:logout' %}">LogOut</a></li>
                         {% endif %}
 
