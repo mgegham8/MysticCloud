@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+
+<body>
+
+<section id="menu" class="menu">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+            <h2>Our Menu</h2>
+            <p>Check Our <span>MysticCloud Menu</span></p>
+        </div>
+
+        <div class="row">
+            {% for item in bar_items %}
+                <div class="col-md-4 mb-4">
+                    <div class="item-card">
+                        <img src="{% if item.image %}{{ item.image.url }}{% else %}
+                            {% static 'img/no_image.jpg' %}{% endif %}" alt="{{ item.name }}" class="item-img img-fluid">
+                        <div class="item-details">
+                            <br>
+                            <h3>{{ item.name }}</h3>
+                            <br>
+                            <h4 class="item-price">{{ item.price }} Amd</h4>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- "Go Back" button -->
+        <div class="text-center mt-4">
+            <a href="{% url 'menu:menu_items' %}" class="btn btn-primary">Go Back</a>
+        </div>
+
+    </div>
+</section>
+
+</body>
+{% endblock %}
