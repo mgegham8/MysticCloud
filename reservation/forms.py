@@ -1,49 +1,90 @@
 from django import forms
+from django.utils import timezone
 from reservation.models import Reservation, Table
 
 
 class ReservationForm(forms.ModelForm):
     """
-    Form for creating and managing table reservations.
-    Includes custom widgets for date and time selection.
+    Modern form for table reservations.
+    Removed email field and updated widgets for a better user experience.
     """
 
     class Meta:
         model = Reservation
-        fields = ['name', 'email', 'phone', 'number_of_persons', 'start_date', 'end_time', 'table']
+        # Email field is removed from the list
+        fields = ['name', 'phone', 'number_of_persons', 'start_date', 'table']
+
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter phone number'}),
-            'number_of_persons': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Full Name',
+                'style': 'border-radius: 8px;'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone Number (e.g. +374...)',
+                'style': 'border-radius: 8px;'
+            }),
+            'number_of_persons': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'style': 'border-radius: 8px;'
+            }),
             'start_date': forms.DateTimeInput(
-                attrs={'type': 'datetime-local', 'class': 'form-control'}
+                attrs={
+                    'type': 'datetime-local',
+                    'class': 'form-control',
+                    'style': 'border-radius: 8px;'
+                }
             ),
-            'end_time': forms.DateTimeInput(
-                attrs={'type': 'datetime-local', 'class': 'form-control'}
-            ),
-            'table': forms.Select(attrs={'class': 'form-control'}),
+            # The table field is often handled by the visual map,
+            # but we keep it styled here as a fallback.
+            'table': forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'border-radius: 8px;'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         """
-        Custom initialization to set up table querysets or other dynamic data.
+        Initialize the form and set up the table queryset.
         """
         super().__init__(*args, **kwargs)
-        # You can filter tables here if needed (e.g., only active tables)
         self.fields['table'].queryset = Table.objects.all()
-        # Optionally, you can customize the label for the table dropdown
-        self.fields['table'].empty_label = "Select a Table"
+        self.fields['table'].empty_label = "Select a Table from the map"
+
+    def clean_start_date(self):
+        """
+        Validation to prevent bookings in the past.
+        """
+        start_date = self.cleaned_data.get("start_date")
+        if start_date and start_date < timezone.now():
+            raise forms.ValidationError("You cannot book a table for a past date.")
+        return start_date
 
     def clean(self):
         """
-        Custom validation to ensure end_time is after start_date.
+        Cross-field validation for capacity and date-specific availability.
         """
         cleaned_data = super().clean()
-        start_date = cleaned_data.get("start_date")
-        end_time = cleaned_data.get("end_time")
+        table = cleaned_data.get('table')
+        start_date = cleaned_data.get('start_date')
+        number_of_persons = cleaned_data.get('number_of_persons')
 
-        if start_date and end_time and end_time <= start_date:
-            raise forms.ValidationError("End time must be after the start date.")
+        if table and start_date:
+            # 1. Capacity Check
+            if number_of_persons and number_of_persons > table.capacity:
+                self.add_error('number_of_persons', f"Maximum capacity for this table is {table.capacity} persons.")
+
+            # 2. Availability Check for the specific date selected
+            booking_date = start_date.date()
+            is_taken = Reservation.objects.filter(
+                table=table,
+                start_date__date=booking_date,
+                is_active=True
+            ).exists()
+
+            if is_taken:
+                raise forms.ValidationError("Sorry, this table is already booked for the selected date.")
 
         return cleaned_data

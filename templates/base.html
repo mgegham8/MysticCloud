@@ -6,99 +6,130 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>MysticCloud Lounge </title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <!-- Dynamic page title -->
+    <title>{% block title %}MysticCloud Lounge{% endblock %}</title>
 
-<!--     Favicons-->
-        <link href="{% static 'img/favicon.png' %}" rel="icon">
-        <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <!-- SEO Meta Tags -->
+    <meta content="MysticCloud Lounge - Premium atmosphere, expert chefs, and the finest hookahs." name="description">
+    <meta content="lounge, hookah, restaurant, mysticcloud, reservations" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Amatic+SC:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Amatic+SC:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
 
-    <!-- Template Main CSS File -->
+    <!-- Main Template CSS File -->
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
+    <!-- Block for page-specific CSS (e.g., profile.css, auth.css) -->
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
+    <!-- ======= Header Section ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center justify-content-between">
 
-        <a href="{% url 'home:home' %}" class="logo d-flex align-items-center me-auto me-lg-0">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="static/img/logo.png" alt=""> -->
-            <h1>MysticCloud Lounge</h1>
-        </a>
+            <!-- Logo Area -->
+            <a href="{% url 'home:home' %}" class="logo d-flex align-items-center me-auto me-lg-0 text-decoration-none">
+                <h1>MysticCloud<span></span></h1>
+            </a>
 
-        <nav id="navbar" class="navbar">
-            <ul>
-                <li><a href="{% url 'home:home' %}">Home</a></li>
-                <li><a href="{% url 'menu:menu_items' %}">Menu</a></li>
-                <li><a href="{% url 'menu:hookahs' %}">Hookah</a></li>
-                <li><a href="{% url 'home:our_events' %}">Events</a></li>
-                <li><a href="{% url 'home:our_chefs' %}">Chefs</a></li>
-                <li><a href="{% url 'home:about_us' %}">About</a></li>
-                <li><a href="{% url 'home:galleries' %}">Gallery</a></li>
-                <li class="dropdown"><a href="#"><span>User</span> <i
-                        class="bi bi-chevron-down dropdown-indicator"></i></a>
-                    <ul>
+            <!-- Navigation Menu -->
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a href="{% url 'home:home' %}">Home</a></li>
+                    <li><a href="{% url 'menu:menu_items' %}">Menu</a></li>
+                    <li><a href="{% url 'menu:hookahs' %}">Hookah</a></li>
+                    <li><a href="{% url 'home:our_events' %}">Events</a></li>
+                    <li><a href="{% url 'home:our_chefs' %}">Chefs</a></li>
+                    <li><a href="{% url 'home:about_us' %}">About</a></li>
+                    <li><a href="{% url 'home:galleries' %}">Gallery</a></li>
 
-                        {% if not request.user.is_authenticated %}
-                        <li><a href="{% url 'users:registration' %}">Register</a></li>
-                        <li><a href="{% url 'users:login' %}">Login</a></li>
-                        {% else %}
-                        <li><a href="{% url 'users:user_profile' %}">Profile</a></li>
-                        <li><a href="{% url  'users:logout' %}">LogOut</a></li>
-                        {% endif %}
+                    <!-- User Account Dropdown -->
+                    <li class="dropdown">
+                        <a href="#">
+                            <span>{% if request.user.is_authenticated %}Account{% else %}Join Us{% endif %}</span>
+                            <i class="bi bi-chevron-down dropdown-indicator"></i>
+                        </a>
+                        <ul>
+                            {% if not request.user.is_authenticated %}
+                                <li><a href="{% url 'users:registration' %}">Register</a></li>
+                                <li><a href="{% url 'users:login' %}">Login</a></li>
+                            {% else %}
+                                <li><a href="{% url 'users:user_profile' %}">My Profile</a></li>
+                                <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'home:contact_us' %}">Contact</a></li>
+                </ul>
+            </nav>
 
+            <!-- Action Button -->
+            <a class="btn-book-a-table" href="{% url 'reservation:reservation' %}">Book a Table</a>
 
-                    </ul>
-                </li>
-                <li><a href="{% url 'home:contact_us' %}">Contact</a></li>
-            </ul>
-        </nav><!-- .navbar -->
+            <!-- Mobile Menu Toggles -->
+            <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+            <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
 
-        <a class="btn-book-a-table" href="{% url 'reservation:reservation' %}">Book a Table</a>
-        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+        </div>
+    </header>
 
+    <!-- ======= System Messages (Alerts) ======= -->
+    {% if messages %}
+    <div class="container" style="margin-top: 100px;">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
     </div>
-</header><!-- End Header -->
-{% include "layouts/alert.html" with form=form %}
+    {% endif %}
 
+    <!-- ======= Main Content Area ======= -->
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
 
-<main id="main">
+    <!-- Vendor JS Files -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
 
-{% block content %}
+    <!-- Template Main JS File -->
+    <script src="{% static 'js/main.js' %}"></script>
 
-{% endblock %}
+    <!-- Block for page-specific Scripts -->
+    {% block extra_js %}{% endblock %}
 
-</main>
+    <!-- Global Initialization Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Animation On Scroll
+            AOS.init({
+                duration: 1000,
+                easing: 'ease-in-out',
+                once: true,
+                mirror: false
+            });
+        });
+    </script>
+
 </body>
-<!-- Vendor JS Files -->
-<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'vendor/aos/aos.js' %}"></script>
-<script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
-<script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
-<script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
-<script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
-
-
-<!-- Template Main JS File -->
-<script src="{% static 'js/main.js' %}"></script>
-
-
 </html>

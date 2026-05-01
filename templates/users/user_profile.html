@@ -1,41 +1,59 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
-        <div class="card p-4">
-            <div class=" image d-flex flex-column justify-content-center align-items-center">
-                <button class="btn btn-secondary">{% if object.profile.image %}<img src="{{ object.profile.image.url }}" height="100" width="100" alt="">
-                {% else %}<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68D1zB62HiAWZAkQpessCgGpmfvJQUX8Rhg&usqp=CAU" height="100" width="100"/>{% endif %}
-                </button>
-                <span class="name mt-3">{{ object.first_name }} {{ object.last_name }}</span> <span class="idd">{{ object.email }}</span>
-                <div class="d-flex flex-row justify-content-center align-items-center gap-2"><span class="idd1">{{ object.profile.phone_number }}</span>
-                    <span><i class="fa fa-copy"></i></span></div>
-                {% if request.user.reservations.all %}
-                <div class="d-flex flex-row justify-content-center align-items-center mt-3"><span
-                        class="number">Reservations <span class="number">{{user.reservations.all|length}}</span></span></div>
-                {% else %}
-                <div class="d-flex flex-row justify-content-center align-items-center mt-3"><span
-                        class="number">You don't have a <span class="number">Reservations</span></span></div>
-                {% endif %}
-                <div class=" d-flex mt-2">
-                    <a href="{% url 'users:update_user' %}"><button class="btn1 btn-dark">Edite Profile</button></a>
-                </div>
-                <div class="text mt-3"><span>Country {{ object.profile.country.name }}<br><br> </span>
-                </div>
-                <div class="gap-3 mt-3 icons d-flex flex-row justify-content-center align-items-center"><span><i
-                        class="fa fa-twitter"></i></span> <span><i class="fa fa-facebook-f"></i></span> <span><i
-                        class="fa fa-instagram"></i></span> <span><i class="fa fa-linkedin"></i></span></div>
+<div class="profile-container-soft">
+    <div class="soft-card">
+
+        <!-- Avatar -->
+        <div class="profile-pic-wrapper">
+            {% if object.profile.image %}
+                <img src="{{ object.profile.image.url }}" alt="Profile Image">
+            {% else %}
+                <img src="https://ui-avatars.com/api/?name={{ object.first_name }}+{{ object.last_name }}&background=f0f0f0&color=999&size=128" alt="User">
+            {% endif %}
+        </div>
+
+        <!-- Info -->
+        <h1 class="name-heading">{{ object.first_name }} {{ object.last_name }}</h1>
+        <p class="email-sub-text">{{ object.email }}</p>
+
+        <div class="stats-divider"></div>
+
+        <!-- Stats -->
+        <div class="stats-row-soft">
+            <div class="stat-item-soft">
+                <span class="val">{{ user.reservations.all|length }}</span>
+                <span class="lbl">Bookings</span>
+            </div>
+            <div class="stat-item-soft">
+                <span class="val">{{ object.profile.country.name|default:"—" }}</span>
+                <span class="lbl">Location</span>
+            </div>
+            <div class="stat-item-soft">
+                <span class="val">{{ object.date_joined|date:"M Y" }}</span>
+                <span class="lbl">Joined</span>
             </div>
         </div>
+
+        <!-- Actions -->
+        <div class="btn-soft-group">
+            <a href="{% url 'users:update_user' %}" class="btn-soft btn-soft-main">
+                Update
+            </a>
+            <a href="{% url 'reservation:view_reservations' %}" class="btn-soft btn-soft-secondary">
+                Orders
+            </a>
+        </div>
+
+        <a href="{% url 'users:logout' %}" class="d-block mt-4 text-muted small text-decoration-none">
+            Logout
+        </a>
+
     </div>
+</div>
 {% endblock %}

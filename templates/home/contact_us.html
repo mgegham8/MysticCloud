@@ -1,10 +1,10 @@
- {% extends 'base.html' %}
- {% block content %}
-  <!-- ======= Contact Section ======= -->
- <br>
- <br>
- <br>
-    <section id="contact" class="contact">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main id="main">
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact" style="margin-top: 80px;">
         <div class="container" data-aos="fade-up">
 
             <div class="section-header">
@@ -16,21 +16,19 @@
                 <iframe style="border:0; width: 100%; height: 350px;"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3048.306677734931!2d44.5088025758754!3d40.179987971478695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x406abcfb8956be05%3A0x73c69e470a2205b8!2s17%20Pavstos%20Buzand%20St%2C%20Yerevan%2C%20Armenia!5e0!3m2!1sen!2sus!4v1706223581164!5m2!1sen!2sus"
                         frameborder="0" allowfullscreen>
-
                 </iframe>
-            </div><!-- End Google Maps -->
+            </div>
 
             <div class="row gy-4">
-
                 <div class="col-md-6">
-                    <div class="info-item  d-flex align-items-center">
+                    <div class="info-item d-flex align-items-center">
                         <i class="icon bi bi-map flex-shrink-0"></i>
                         <div>
                             <h3>Our Address</h3>
                             <p>17 Buzand Street Yerevan</p>
                         </div>
                     </div>
-                </div><!-- End Info Item -->
+                </div>
 
                 <div class="col-md-6">
                     <div class="info-item d-flex align-items-center">
@@ -40,101 +38,76 @@
                             <p>mysticcloud@gmail.com</p>
                         </div>
                     </div>
-                </div><!-- End Info Item -->
+                </div>
 
                 <div class="col-md-6">
-                    <div class="info-item  d-flex align-items-center">
+                    <div class="info-item d-flex align-items-center">
                         <i class="icon bi bi-telephone flex-shrink-0"></i>
                         <div>
                             <h3>Call Us</h3>
                             <p>+374 77 777 777</p>
                         </div>
                     </div>
-                </div><!-- End Info Item -->
+                </div>
 
                 <div class="col-md-6">
-                    <div class="info-item  d-flex align-items-center">
+                    <div class="info-item d-flex align-items-center">
                         <i class="icon bi bi-share flex-shrink-0"></i>
                         <div>
                             <h3>Opening Hours</h3>
-                            <div><strong>Mon-Sun:</strong> 11:00 - 23:00;
-
-                            </div>
+                            <p><strong>Mon-Sun:</strong> 11:00 - 23:00</p>
                         </div>
                     </div>
-                </div><!-- End Info Item -->
-
-            </div>
-
-        </div>
-    </section><!-- End Contact Section -->
-
-</main><!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-
-    <div class="container">
-        <div class="row gy-3">
-            <div class="col-lg-3 col-md-6 d-flex">
-                <i class="bi bi-geo-alt icon"></i>
-                <div>
-                    <h4>Address</h4>
-                    <p>
-                        17 Buzand Street <br>
-                        Yerevan<br>
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="col-lg-3 col-md-6 footer-links d-flex">
-                <i class="bi bi-telephone icon"></i>
-                <div>
-                    <h4>Reservations</h4>
-                    <p>
-                        <strong>Phone:</strong> +374 77 777 777<br>
-                        <strong>Email:</strong> mysticcloud@gmail.com<br>
-                    </p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="col-lg-3 col-md-6 footer-links d-flex">
-                <i class="bi bi-clock icon"></i>
-                <div>
-                    <h4>Opening Hours</h4>
-                    <p>
-                        <strong>Mon-Sun: 11:00</strong> - 23:00<br>
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col-lg-3 col-md-6 d-flex">
+                    <i class="bi bi-geo-alt icon"></i>
+                    <div>
+                        <h4>Address</h4>
+                        <p>17 Buzand Street, Yerevan</p>
+                    </div>
+                </div>
 
-                    </p>
+                <div class="col-lg-3 col-md-6 footer-links d-flex">
+                    <i class="bi bi-telephone icon"></i>
+                    <div>
+                        <h4>Reservations</h4>
+                        <p>
+                            <strong>Phone:</strong> +374 77 777 777<br>
+                            <strong>Email:</strong> mysticcloud@gmail.com
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 footer-links d-flex">
+                    <i class="bi bi-clock icon"></i>
+                    <div>
+                        <h4>Opening Hours</h4>
+                        <p><strong>Mon-Sun:</strong> 11:00 - 23:00</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 footer-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-links d-flex">
+                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-lg-3 col-md-6 footer-links">
-                <h4>Follow Us</h4>
-                <div class="social-links d-flex">
-                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                </div>
+        </div>
+        <div class="container text-center mt-4">
+            <div class="copyright">
+                &copy; Copyright <strong><span>MysticCloud Lounge</span></strong>. All Rights Reserved
             </div>
-
         </div>
-    </div>
-
-    <div class="container">
-        <div class="copyright">
-            &copy; Copyright <strong><span>MysticCloud Lounge</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits">
-
-        </div>
-    </div>
-
-</footer>
-<!-- End Footer -->
-
-<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
- {% endblock %}
+    </footer>
+</main>
+{% endblock %}

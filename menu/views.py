@@ -1,68 +1,41 @@
-from django.shortcuts import render
-from django.views import View
 from django.views.generic import DetailView, ListView
-from menu.models import Category, BarItem, BarCategory, Hookah
+from .models import Category, BarItem, BarCategory, Hookah
 
 class MenuListView(ListView):
-    """
-    Displays the full food menu grouped by categories.
-    """
     model = Category
     template_name = "menu/menu.html"
     context_object_name = 'categories'
 
     def get_queryset(self):
-        # Prefetching related items to minimize database hits
-        return Category.objects.prefetch_related("menu_items", "bar_category_items").all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Adding bar categories to the food menu context if needed
-        context['bar_categories'] = BarCategory.objects.all()
-        return context
-
+        # Օպտիմիզացված բեռնում
+        return Category.objects.prefetch_related("menu_items").all()
 
 class BarListView(ListView):
-    """
-    Displays the bar menu with categories and their specific items.
-    """
     model = BarCategory
-    template_name = "menu/menu.html"
+    template_name = "menu/bar_list.html"  # Սա քո նոր սիրուն template-ն է
     context_object_name = 'bar_categories'
 
     def get_queryset(self):
-        # Optimization for loading all bar items at once
+        # Քանի որ քո հին կոդում կար "bar_items", օգտագործում ենք դա
         return BarCategory.objects.prefetch_related("bar_items").all()
 
-
-class HookahListView(ListView):
-    """
-    Displays the list of available hookah flavors and prices.
-    """
+class HookahListView(ListView): # Դարձրեցի ListView ավելի մաքուր կոդի համար
     model = Hookah
     template_name = "menu/hookah.html"
     context_object_name = "hookahs"
 
-
 class BarCategoryDetailView(DetailView):
-    """
-    Detailed view for a specific bar category and its contents.
-    """
     model = BarCategory
     template_name = "menu/bar_item_detail.html"
     context_object_name = "bar_item_detail"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Explicitly fetching bar items for the selected category
+        # Օգտագործում ենք նույն "bar_items" կապը
         context['bar_items'] = self.object.bar_items.all()
         return context
 
-
 class BarItemDetailView(DetailView):
-    """
-    Detailed view for a single bar item or drink.
-    """
     model = BarItem
     template_name = "menu/bar_item_detail.html"
     context_object_name = "bar_item_detail"

@@ -1,80 +1,96 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<br>
 
-
-<html lang="en">
-
-<body>
-
-<section id="menu" class="menu">
+<section id="menu" class="menu" style="padding-top: 100px;">
     <div class="container" data-aos="fade-up">
 
-        <div class="section-header">
+        <div class="section-header text-center mb-5">
             <h2>Our Menu</h2>
-
             <p>Check Our <span>MysticCloud Menu</span></p>
         </div>
 
+        <!-- Կատեգորիաների ընտրացանկ -->
         <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
             {% for category in categories %}
             <li class="nav-item">
                 <a class="nav-link {% if forloop.first %}active show{% endif %}" data-bs-toggle="tab"
-                   data-bs-target="#menu-{{ category.name|lower }}">
+                   data-bs-target="#menu-{{ category.id }}"> <!-- Օգտագործիր ID, որ խնդիր չլինի բացատների հետ -->
                     <h4>{{ category.name }}</h4>
                 </a>
-            </li><!-- End tab nav item -->
+            </li>
             {% endfor %}
         </ul>
 
         <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
-
             {% for category in categories %}
-            <div class="tab-pane fade " id="menu-{{ category.name|lower }}">
+            <!-- Ավելացված է դինամիկ active կլասը -->
+            <div class="tab-pane fade {% if forloop.first %}active show{% endif %}" id="menu-{{ category.id }}">
 
-                <div class="tab-header text-center">
+                <div class="tab-header text-center mb-5">
                     <p>Menu</p>
                     <h3>{{ category.name }}</h3>
                 </div>
 
                 <div class="row gy-5">
                     {% for item in category.menu_items.all %}
-                    <div class="col-lg-4 menu-item">
-                        <a href="{{ item.image.url }}" class="glightbox">
-                            <img src="{% if item.image %}{{ item.image.url }}{% else %}
-                                {% static 'img/no_image.jpg' %}{% endif %}"
-                                 class="menu-img img-fluid" alt="{{ item.name }}">
+                    <div class="col-lg-4 menu-item text-center">
+                        <a href="{% if item.image %}{{ item.image.url }}{% else %}{% static 'img/no_image.jpg' %}{% endif %}" class="glightbox">
+                            <img src="{% if item.image %}{{ item.image.url }}{% else %}{% static 'img/no_image.jpg' %}{% endif %}"
+                                 class="menu-img img-fluid rounded-pill mb-3" alt="{{ item.name }}" style="width: 200px; height: 200px; object-fit: cover;">
                         </a>
                         <h4>{{ item.name }}</h4>
-                        <p class="ingredients">{{ item.description }}</p>
-                        <p class="price">{{ item.price }} Amd</p>
-                    </div><!-- Menu Item -->
+                        <p class="ingredients text-muted">
+                            {{ item.description|truncatechars:100 }}
+                        </p>
+                        <p class="price" style="color: #ce1212; font-weight: 700; font-size: 1.25rem;">
+                            {{ item.price }} AMD
+                        </p>
+                    </div>
                     {% endfor %}
 
                     <!-- Display bar items for "Bar" category -->
-                  {% if category.name == "Bar" %}
-                    {% for item in bar_categories %}
-                   <div class="col-lg-4 menu-item">
-                        <h3>
-                            <a href="{% url 'menu:bar_item_detail' pk=item.pk %}" class="btn btn-link menu-btn">
-                                <button class="btn btn-link menu-btn"><h3>{{ item.name }}</h3></button>
-                            </a>
-                        </h3>
+                    {% if category.name == "Bar" %}
+                    <div class="col-12 mt-4">
+                        <div class="row justify-content-center">
+                            {% for item in bar_categories %}
+                            <div class="col-lg-3 col-md-4 col-6 mb-3">
+                                <a href="{% url 'menu:bar_item_detail' pk=item.pk %}" class="btn btn-outline-danger w-100 py-3 rounded-4 shadow-sm">
+                                    {{ item.name }}
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <!-- Bar Menu Item -->
-                    {% endfor %}
-                  {% endif %}
+                    {% endif %}
 
                 </div>
-            </div><!-- End Menu Content -->
+            </div>
             {% endfor %}
-
         </div>
-
     </div>
-</section><!-- End Menu Section -->
+</section>
 
-</body>
+<style>
+    .menu .nav-link {
+        cursor: pointer;
+        border: none;
+        margin: 0 10px;
+        padding: 10px 20px;
+        transition: 0.3s;
+        color: #37373f;
+    }
+    .menu .nav-link.active {
+        color: #ce1212;
+        border-bottom: 3px solid #ce1212;
+        background: none;
+    }
+    .menu-img {
+        transition: 0.3s;
+    }
+    .menu-item:hover .menu-img {
+        transform: scale(1.1);
+    }
+</style>
 
 {% endblock %}

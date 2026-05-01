@@ -14,6 +14,9 @@ urlpatterns = [
     path('', include('users.urls', namespace='users')),
     path('reservation/', include('reservation.urls', namespace='reservation')),
 
+    # Django-allauth URLs for social authentication (Google, Facebook, etc.)
+    path('accounts/', include('allauth.urls')),
+
     # Password management views
     path("change-password/", auth_views.PasswordChangeView.as_view(), name="password_change"),
     path("reset-password/", auth_views.PasswordResetView.as_view(), name="reset_password"),

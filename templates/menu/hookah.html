@@ -2,47 +2,71 @@
 {% load static %}
 {% block content %}
 
-<br>
-<br>
-<br>
-
-<html lang="en">
-
-<body>
-
-<section id="menu" class="menu">
+<!-- ======= Hookahs Section ======= -->
+<section id="menu" class="menu" style="padding-top: 100px; min-height: 80vh;">
     <div class="container" data-aos="fade-up">
 
-        <div class="section-header">
+        <div class="section-header text-center mb-5">
             <h2>Our Hookahs</h2>
             <p>See Our <span>Hookahs List</span></p>
         </div>
 
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <div class="table-responsive">
-                    <!-- Add a class to the table -->
-                    <table class="table table-striped light-table">
-                        <thead class="thead-dark">
+                <div class="hookah-list-container shadow-sm rounded-4 overflow-hidden">
+                    <table class="table table-hover mb-0">
+                        <thead style="background-color: #37373f; color: white;">
                             <tr>
-                                <th>Name</th>
-                                <th>Price</th>
+                                <th class="py-3 ps-4">Name</th>
+                                <th class="py-3 text-end pe-4">Price</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for hookah in hookahs %}
-                                <tr>
-                                    <td><h4>{{ hookah.name }}</h4></td>
-                                    <td><h4>{{ hookah.price }} Amd</h4></td>
+                                <tr class="align-middle">
+                                    <td class="py-3 ps-4">
+                                        <h4 class="mb-0" style="font-size: 1.1rem; font-weight: 600; color: #37373f;">
+                                            <i class="bi bi-wind me-2" style="color: #ce1212;"></i>{{ hookah.name }}
+                                        </h4>
+                                    </td>
+                                    <td class="py-3 text-end pe-4">
+                                        <span class="price-tag" style="color: #ce1212; font-weight: 700; font-size: 1.1rem;">
+                                            {{ hookah.price }} AMD
+                                        </span>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
+
+                {% if not hookahs %}
+                <div class="text-center mt-5">
+                    <p class="text-muted">Our hookah list is currently being updated. Please check back later.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
 
     </div>
 </section>
+
+<style>
+    .hookah-list-container tr {
+        transition: 0.3s;
+    }
+    .hookah-list-container tr:hover {
+        background-color: rgba(206, 18, 18, 0.05);
+        transform: translateX(5px);
+    }
+    .hookah-list-container {
+        background: #fff;
+        border: 1px solid #eee;
+    }
+    .table > :not(caption) > * > * {
+        border-bottom-width: 1px;
+        border-color: #f4f4f4;
+    }
+</style>
 
 {% endblock %}

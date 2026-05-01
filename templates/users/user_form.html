@@ -1,17 +1,44 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load socialaccount %}
 
 {% block content %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<div class="container">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form|crispy }}
-        <button type="submit" class="brn btn-success">Register</button>
-        </form>
+<div class="container my-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-dark">Create Account</h2>
+                        <p class="text-muted">Join us today!</p>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-grid gap-2 mt-4">
+                            <button class="btn btn-success btn-lg shadow-sm" type="submit">
+                                <i class="fas fa-user-plus me-2"></i>Register
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4">
+                        <div class="position-relative mb-4">
+                            <hr>
+                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">Or register with</span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger shadow-sm mb-2">
+                                <i class="fab fa-google me-2"></i> Google
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}

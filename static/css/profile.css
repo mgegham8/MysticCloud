@@ -1,88 +1,115 @@
-* {
-    margin: 0;
-    padding: 0
+/* Soft Modern Aesthetic */
+.profile-container-soft {
+    background: #f8f9fa; /* Շատ բաց մոխրագույն/սպիտակ */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
 }
 
-body {
-    background-color: #000
+.soft-card {
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 60px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.03); /* Գրեթե անտեսանելի ստվեր */
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
 }
 
-.card {
-    width: 350px;
-    background-color: #efefef;
-    border: none;
-    cursor: pointer;
-    transition: all 0.5s;
+/* Անունը և Էլ. հասցեն */
+.name-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 20px;
+    margin-bottom: 5px;
 }
 
-.image img {
-    transition: all 0.5s
-}
-
-.card:hover .image img {
-    transform: scale(1.5)
-}
-
-.btn {
-    height: 140px;
-    width: 140px;
-    border-radius: 50%
-}
-
-.name {
-    font-size: 22px;
-    font-weight: bold
-}
-
-.idd {
-    font-size: 14px;
-    font-weight: 600
-}
-
-.idd1 {
-    font-size: 12px
-}
-
-.number {
-    font-size: 22px;
-    font-weight: bold
-}
-
-.follow {
-    font-size: 12px;
-    font-weight: 500;
-    color: #444444
-}
-
-.btn1 {
-    height: 40px;
-    width: 150px;
-    border: none;
-    background-color: #000;
-    color: #aeaeae;
-    font-size: 15px
-}
-
-.text span {
-    font-size: 13px;
-    color: #545454;
-    font-weight: 500
-}
-
-.icons i {
-    font-size: 19px
-}
-
-hr .new1 {
-    border: 1px solid
-}
-
-.join {
-    font-size: 14px;
+.email-sub-text {
+    font-size: 0.9rem;
     color: #a0a0a0;
-    font-weight: bold
+    letter-spacing: 0.5px;
 }
 
-.date {
-    background-color: #ccc
+/* Պրոֆիլի նկարի «փափուկ» շրջանակ */
+.profile-pic-wrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 40px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.02), 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.profile-pic-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    object-fit: cover;
+}
+
+/* Վիճակագրության բաժին */
+.stats-divider {
+    height: 1px;
+    background: #f0f0f0;
+    margin: 40px 0;
+}
+
+.stats-row-soft {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-item-soft .val {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.stat-item-soft .lbl {
+    font-size: 0.75rem;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Կոճակները՝ որպես մաքուր էլեմենտներ */
+.btn-soft-group {
+    margin-top: 50px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-soft {
+    flex: 1;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-soft-main {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.btn-soft-main:hover {
+    background: #ce1212; /* MysticCloud-ի կարմիրը միայն hover-ի ժամանակ */
+    transform: translateY(-3px);
+}
+
+.btn-soft-secondary {
+    background: #f0f0f0;
+    color: #555;
+}
+
+.btn-soft-secondary:hover {
+    background: #e5e5e5;
+    color: #000;
 }

@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <!-- ======= Gallery Section ======= -->
-<br>
-<br>
-<br>
-    <section id="gallery" class="gallery section-bg">
+    <section id="gallery" class="gallery section-bg" style="padding-top: 100px;">
         <div class="container" data-aos="fade-up">
 
-            <div class="section-header">
-                <h2>Gallery</h2>
+            <div class="section-header text-center mb-5">
+                <h2 style="font-family: 'Amatic SC', cursive; font-size: 3rem;">Gallery</h2>
                 <p>Check <span>Our Gallery</span></p>
             </div>
 
@@ -18,7 +16,13 @@
                     {% for image in gallery_images %}
                         <div class="swiper-slide">
                             <a class="glightbox" data-gallery="images-gallery" href="{{ image.image.url }}">
-                                <img src="{{ image.image.url }}" class="img-fluid" alt="">
+                                <div class="gallery-item">
+                                    <img src="{{ image.image.url }}" class="img-fluid rounded-4" alt="MysticCloud Gallery Image">
+                                    <!-- Optional: Overlay effect -->
+                                    <div class="gallery-links d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-zoom-in text-white" style="font-size: 2rem;"></i>
+                                    </div>
+                                </div>
                             </a>
                         </div>
                     {% endfor %}
@@ -27,5 +31,32 @@
             </div>
 
         </div>
-    </section><!-- End Gallery Section -->
+    </section>
+
+    <style>
+        /* Gallery Image Hover Effect */
+        .gallery-item {
+            overflow: hidden;
+            position: relative;
+            transition: 0.4s;
+            border: 1px solid #eee;
+            border-radius: 20px;
+        }
+        .gallery-item img {
+            transition: 0.4s;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .gallery-links {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: 0.4s;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .gallery-item:hover .gallery-links {
+            opacity: 1;
+        }
+    </style>
 {% endblock content %}

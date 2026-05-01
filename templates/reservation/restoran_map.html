@@ -1,0 +1,45 @@
+<!-- Main container for the restaurant's visual layout -->
+<div class="restaurant-floorplan">
+
+    <!-- Section for tables located near the windows -->
+    <div class="window-section">
+        <span class="area-label">Window Side</span>
+        <div class="table-grid">
+            <!-- Table items with data-table attributes linked to Database IDs -->
+            <div class="table-item" data-table="1">1</div>
+            <div class="table-item" data-table="2">2</div>
+            <div class="table-item" data-table="3">3</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Section for tables in the central part of the restaurant -->
+        <div class="col-md-6 border-divider">
+            <span class="area-label">Center Area</span>
+            <div class="table-grid">
+                <div class="table-item" data-table="4">4</div>
+                <div class="table-item" data-table="5">5</div>
+            </div>
+        </div>
+
+        <!-- Section for tables located against the wall -->
+        <div class="col-md-6">
+            <span class="area-label">Wall Side</span>
+            <div class="table-grid">
+                <div class="table-item" data-table="6">6</div>
+                <div class="table-item" data-table="7">7</div>
+                <div class="table-item" data-table="8">8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special section for private VIP rooms -->
+    <div class="vip-section mt-4">
+        <span class="area-label">VIP Private Rooms</span>
+        <div class="table-grid">
+            <!-- VIP tables often have higher IDs and special styling -->
+            <div class="table-item vip-room" data-table="9">VIP 9</div>
+            <div class="table-item vip-room" data-table="10">VIP 10</div>
+        </div>
+    </div>
+</div>

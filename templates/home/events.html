@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<br>
-<br>
-<br>
-<section id="events" class="events">
+<!-- ======= Events Section ======= -->
+<section id="events" class="events" style="padding-top: 100px;">
     <div class="container-fluid" data-aos="fade-up">
 
-        <div class="section-header">
-            <h2>Events</h2>
+        <div class="section-header text-center mb-5">
+            <h2 style="font-family: 'Amatic SC', cursive; font-size: 3rem;">Events</h2>
             <p>Share <span>Your Moments</span> In Our Restaurant</p>
         </div>
 
@@ -16,10 +15,17 @@
             <div class="swiper-wrapper">
             {% for event in events %}
                 <div class="swiper-slide event-item d-flex flex-column justify-content-end"
-                     style="background-image: url('{{ event.image.url }}')">
-                    <h3>{{ event.name }}</h3>
-                    <div class="price align-self-start">{{ event.price }} Amd</div>
-                    <p class="description">{{ event.description }}</p>
+                     style="background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8)), url('{{ event.image.url }}') center center; background-size: cover; border-radius: 25px; min-height: 400px; margin: 15px;">
+
+                    <div class="event-content p-4 text-white">
+                        <h3 style="font-weight: 700; margin-bottom: 10px;">{{ event.name }}</h3>
+                        <div class="price fw-bold mb-3" style="font-size: 1.5rem; color: #ce1212;">
+                            {{ event.price }} <span style="font-size: 1rem;">AMD</span>
+                        </div>
+                        <p class="description" style="font-size: 0.95rem; opacity: 0.9;">
+                            {{ event.description }}
+                        </p>
+                    </div>
                 </div><!-- End Event item -->
             {% endfor %}
             </div>
@@ -27,5 +33,19 @@
         </div>
 
     </div>
-</section><!-- End Events Section -->
+</section>
+
+<style>
+    /* Ensure the slider images look consistent */
+    .event-item {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+    .event-item:hover {
+        transform: translateY(-10px);
+    }
+    .swiper-pagination-bullet-active {
+        background-color: #ce1212 !important;
+    }
+</style>
 {% endblock %}

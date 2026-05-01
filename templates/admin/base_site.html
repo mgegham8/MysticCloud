@@ -1,10 +1,15 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base_site.html" %}
 {% load static %}
 
-{% block branding  %}
-    <h1 id="header">MysticCloud Hookah</h1>
+{% block branding %}
+    <h1 id="site-name">
+        <img src="{% static 'img/logo.png' %}" alt="Logo" style="height: 40px; margin-right: 10px;">
+        MysticCloud Hookah Admin
+    </h1>
 {% endblock %}
 
+{% block title %}MysticCloud Management{% endblock %}
+
 {% block extrastyle %}
-    <link rel="stylesheet" href="{% static 'admin/style.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/custom_admin.css' %}">
 {% endblock %}

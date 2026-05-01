@@ -1,30 +1,111 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
-{% block content %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<div class="container">
-<h1>Reservation</h1>
-{% if not request.user.is_authenticated %}
-<h2>if you want to reserve a table, please register /login account before that</h2>
-{% else %}
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Reserve</button>
-</form>
-{% endif %}
-    </div>
 
+{% block content %}
+<!-- Modernized styles for the reservation map -->
+<link rel="stylesheet" href="{% static 'css/reservation/map_style.css' %}">
+
+<div class="container" style="margin-top: 120px; margin-bottom: 60px;">
+    <h1 class="mb-5 text-center fw-bold">Table Reservation</h1>
+
+    {% if not request.user.is_authenticated %}
+        <div class="alert alert-warning text-center py-4 shadow-sm border-0">
+            <h4>Please <a href="{% url 'login' %}" class="text-danger">login</a> to make a reservation.</h4>
+        </div>
+    {% else %}
+        <div class="row gx-lg-5">
+            <!-- Left Side: Interactive Map -->
+            <div class="col-lg-7 mb-4">
+                <div class="card shadow-sm border-0 p-4 h-100" style="border-radius: 15px;">
+                    <h5 class="mb-4 font-weight-bold text-secondary">Restaurant Floor Plan</h5>
+                    {% include "reservation/restoran_map.html" %}
+
+                    <!-- Color Legend for better UX -->
+                    <div class="mt-4 d-flex gap-3 justify-content-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span style="width: 12px; height: 12px; background: #28a745; display: inline-block; border-radius: 50%;"></span>
+                            <small class="text-muted">Selected</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span style="width: 12px; height: 12px; background: #ff4d4d; display: inline-block; border-radius: 50%;"></span>
+                            <small class="text-muted">Occupied</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span style="width: 12px; height: 12px; background: #f8f9fa; border: 1px solid #dee2e6; display: inline-block; border-radius: 50%;"></span>
+                            <small class="text-muted">Available</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Booking Form (Email removed via forms.py) -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 p-4 h-100" style="border-radius: 15px;">
+                    <h5 class="mb-4 font-weight-bold text-secondary">Booking Details</h5>
+                    <form action="" method="POST" id="reservation-form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-success btn-lg w-100 mt-4 shadow-sm" style="border-radius: 10px; font-weight: 600;">
+                            Confirm Reservation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tables = document.querySelectorAll('.table-item');
+    const tableSelect = document.querySelector('select[name="table"]') ||
+                        document.getElementById('id_table');
+
+    // 1. Fetch booked IDs from Django context
+    const bookedIds = {{ booked_table_ids|safe }};
+
+    // 2. Initialize map: mark already booked tables
+    tables.forEach(table => {
+        const dbId = parseInt(table.getAttribute('data-table'));
+        if (bookedIds.includes(dbId)) {
+            table.classList.add('booked');
+            table.style.pointerEvents = 'none'; // Disable interaction
+        }
+    });
+
+    // 3. Handle table selection based on your working logic
+    tables.forEach(table => {
+        table.addEventListener('click', function() {
+            // Visual selection highlight
+            tables.forEach(t => t.classList.remove('selected-table'));
+            this.classList.add('selected-table');
+
+            // Extraction logic: Get the table number from text (e.g., "VIP 9" -> "9")
+            const tableNumber = this.innerText.replace(/[^\d]/g, '').trim();
+
+            if (tableSelect) {
+                let found = false;
+
+                // Iterate through dropdown options to match the visual selection
+                for (let i = 0; i < tableSelect.options.length; i++) {
+                    const optionText = tableSelect.options[i].text;
+                    const match = optionText.match(/\b(\d+)\b/);
+
+                    if (match && match[1] === tableNumber) {
+                        tableSelect.value = tableSelect.options[i].value;
+                        found = true;
+                        console.log("Successfully matched Table " + tableNumber + " to DB ID: " + tableSelect.value);
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    console.warn("Table " + tableNumber + " not found in the dropdown list.");
+                }
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

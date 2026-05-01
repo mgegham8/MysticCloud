@@ -1,0 +1,70 @@
+/* Modern Success Page Styling */
+.status-viewport {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: transparent;
+}
+
+.success-card-modern {
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 40px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.04);
+    max-width: 450px;
+    width: 90%;
+    transform: translateY(20px);
+    animation: slideUpFade 0.6s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: #f0fff4;
+    color: #22c55e; /* Modern Emerald Green */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+}
+
+.success-card-modern h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.5px;
+}
+
+.success-card-modern p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn-continue {
+    background: #ce1212; /* Քո հիմնական կարմիրը */
+    color: white;
+    padding: 12px 32px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-continue:hover {
+    background: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    color: #fff;
+}
+
+@keyframes slideUpFade {
+    to { transform: translateY(0); opacity: 1; }
+    from { transform: translateY(40px); opacity: 0; }
+}
