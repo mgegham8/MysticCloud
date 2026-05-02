@@ -1,0 +1,75 @@
+       body {
+            background-image: url('https://img.freepik.com/free-photo/abstract-background-black-smoke-texture-border-cinematic-design_53876-146675.jpg?w=740&t=st=1705397341~exp=1705397941~hmac=683578ed2e32c465c85d917b1b679b70c062e3d41f3652fcebbbf983ed8af401');
+            background-size: 100%, 200px;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+            /* Additional styles for the body element */
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: black;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        section.hero {
+            text-align: center;
+            padding: 50px;
+            color: #fff;
+        }
+        section.contact {
+            position: relative;
+            margin-top: 50px;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            height: 300px; /* Set the height to match the map */
+        }
+
+        #map {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            height: 100%; /* Set the height to 100% to fill the container */
+        }
+
+        section.hero h2 {
+            margin-bottom: 20px;
+        }
+
+        section.about {
+            background-color: #f4f4f4;
+            padding: 50px;
+            text-align: center;
+        }
+
+        section.about h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Add more styles for other sections as needed */
+
+        footer {
+            background-color: black;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            bottom: 0;
+            width: 100%;
+        }

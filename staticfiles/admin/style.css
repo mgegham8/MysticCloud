@@ -1,0 +1,35 @@
+#header {
+    background: #3d443d;
+    color: #fff;
+}
+
+#branding h1 {
+    color: #fff;
+}
+
+div.breadcrumbs {
+    background: #2f342f;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: #3d443d;
+}
+
+a:link, a:visited {
+    color: #151313;
+
+}
+
+:root {
+    --accent: #151313;
+    --selected-row: #70ecce;
+    --darkened-bg: #fff;
+    --primary: #3d443d;
+    --secondary: #035394;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}

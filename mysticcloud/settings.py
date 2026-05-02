@@ -2,19 +2,22 @@ import os
 from pathlib import Path
 import environ
 from django.contrib.messages import constants as message_constants
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 
 env = environ.Env()
-# Reading .env file if it exists
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+# Reading .env file only if it exists (useful for local development)
+if os.path.exists(os.path.join(BASE_DIR, ".env")):
+    environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # --- SECURITY SETTINGS ---
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = ['*']
+# Use a default key for safety during build processes on Render
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-default-key-for-mysticcloud')
+DEBUG = env.bool('DEBUG', default=True) # Set to False in production
+ALLOWED_HOSTS = ['*'] # Allows all hosts for easy deployment; restrict in production
 
 # --- APPLICATION DEFINITION ---
 INSTALLED_APPS = [
@@ -24,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',  # Required by django-allauth
+    'django.contrib.sites',  # Required for site-specific features
 
     # Third-party apps
     'crispy_forms',
@@ -32,14 +35,14 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
 
-    # Django-allauth apps for social authentication
+    # Authentication framework (django-allauth)
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
-    # Local apps
+    # Local business apps for the Hookah Lounge
     'menu.apps.MenuConfig',
     'users.apps.UserConfig',
     'home.apps.HomeConfig',
@@ -48,14 +51,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Handles static files on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # Essential for multi-language support
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Add allauth middleware
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n', # Added for translations
             ],
         },
     },
@@ -80,6 +84,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysticcloud.wsgi.application'
 
 # --- DATABASE ---
+# Uses Render's DATABASE_URL if available, otherwise falls back to local SQLite
 DATABASES = {
     'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR}/db.sqlite3')
 }
@@ -89,36 +94,39 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "home:home"
 
-# Allauth backend settings
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Required for allauth
 SITE_ID = 1
 
-# Allauth custom configurations for quick registration
-ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use email to login
+# Authentication logic (Email based)
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to "mandatory" for production
-ACCOUNT_LOGOUT_ON_GET = True  # Logout immediately on clicking the link
-SOCIALACCOUNT_QUERY_EMAIL = True  # Request email from social providers
+ACCOUNT_EMAIL_VERIFICATION = "none" # Set to 'mandatory' when SMTP is ready
+ACCOUNT_LOGOUT_ON_GET = True
+SOCIALACCOUNT_QUERY_EMAIL = True
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# --- INTERNATIONALIZATION ---
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# --- INTERNATIONALIZATION (Multi-language) ---
+LANGUAGE_CODE = 'hy' # Default language set to Armenian
+TIME_ZONE = 'Asia/Yerevan' # Localized time zone
 USE_I18N = True
 USE_TZ = True
+
+# Supported languages for the Hookah Lounge menu
+LANGUAGES = [
+    ('hy', _('Armenian')),
+    ('en', _('English')),
+    ('ru', _('Russian')),
+]
+
+# Path where translation files (.po/.mo) will be stored
+LOCALE_PATHS = [
+    BASE_DIR / 'locale/',
+]
 
 # --- STATIC & MEDIA FILES ---
 STATIC_URL = 'static/'
@@ -128,6 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Efficient storage for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- EMAIL SETTINGS ---
@@ -142,7 +151,7 @@ EMAIL_USE_TLS = True
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379")
 CELERY_RESULT_BACKEND = 'django-db'
 
-# --- MESSAGES & CRISPY FORMS ---
+# --- MESSAGES & UI SETTINGS ---
 MESSAGE_TAGS = {message_constants.ERROR: "danger"}
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
@@ -150,20 +159,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-# --- DEBUG TOOLBAR ---
+# --- DEVELOPMENT TOOLS ---
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
 
+# Social account logic for seamless login
 SOCIALACCOUNT_ADAPTER = 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter'
-SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
-
-

@@ -1,0 +1,13 @@
+body {
+    font-family: sans-serif; /* Use a fallback font */
+}
+
+.custom-text {
+    display: inline-block;
+    background-image: url('static/img/hookah.webp');
+    background-size: contain; /* or cover, depending on your preference */
+    background-repeat: no-repeat;
+    color: transparent; /* Hide the actual text */
+    font-size: 16px; /* Adjust the font size as needed */
+    line-height: 1.2; /* Adjust the line height as needed */
+}
