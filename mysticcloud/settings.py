@@ -8,16 +8,19 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 
+# Initialize environment variables
 env = environ.Env()
 # Reading .env file only if it exists (useful for local development)
 if os.path.exists(os.path.join(BASE_DIR, ".env")):
     environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # --- SECURITY SETTINGS ---
-# Use a default key for safety during build processes on Render
+# Secret key is retrieved from environment variables for security
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-default-key-for-mysticcloud')
-DEBUG = env.bool('DEBUG', default=True) # Set to False in production
-ALLOWED_HOSTS = ['*'] # Allows all hosts for easy deployment; restrict in production
+# Debug mode should be True during development and False in production
+DEBUG = env.bool('DEBUG', default=True)
+# Allowed hosts for deployment; '*' allows all, but should be restricted in production
+ALLOWED_HOSTS = ['*']
 
 # --- APPLICATION DEFINITION ---
 INSTALLED_APPS = [
@@ -27,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',  # Required for site-specific features
+    'django.contrib.sites',
 
     # Third-party apps
     'crispy_forms',
@@ -42,7 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
-    # Local business apps for the Hookah Lounge
+    # Local business apps
     'menu.apps.MenuConfig',
     'users.apps.UserConfig',
     'home.apps.HomeConfig',
@@ -51,7 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Handles static files on Render
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Handles static files on production servers
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', # Essential for multi-language support
     'django.middleware.common.CommonMiddleware',
@@ -75,7 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n', # Added for translations
+                'django.template.context_processors.i18n', # Added for internationalization
             ],
         },
     },
@@ -83,13 +86,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysticcloud.wsgi.application'
 
-# --- DATABASE ---
+# --- DATABASE CONFIGURATION ---
 # Uses Render's DATABASE_URL if available, otherwise falls back to local SQLite
 DATABASES = {
     'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR}/db.sqlite3')
 }
 
-# --- AUTHENTICATION ---
+# --- AUTHENTICATION SETTINGS ---
 AUTH_USER_MODEL = "users.User"
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "home:home"
@@ -101,43 +104,44 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-# Authentication logic (Email based)
+# Email-based authentication logic
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_EMAIL_VERIFICATION = "none" # Set to 'mandatory' when SMTP is ready
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 # --- INTERNATIONALIZATION (Multi-language) ---
 LANGUAGE_CODE = 'hy' # Default language set to Armenian
-TIME_ZONE = 'Asia/Yerevan' # Localized time zone
+TIME_ZONE = 'Asia/Yerevan'
 USE_I18N = True
 USE_TZ = True
 
-# Supported languages for the Hookah Lounge menu
+# Supported languages for the application
 LANGUAGES = [
     ('hy', _('Armenian')),
     ('en', _('English')),
     ('ru', _('Russian')),
 ]
 
-# Path where translation files (.po/.mo) will be stored
+# Path where translation files (.po/.mo) are stored
 LOCALE_PATHS = [
     BASE_DIR / 'locale/',
 ]
 
-# --- STATIC & MEDIA FILES ---
+# --- STATIC & MEDIA FILES CONFIGURATION ---
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Media files (User uploads like menu images)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Efficient storage for production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# WhiteNoise storage optimization for static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # --- EMAIL SETTINGS ---
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -165,7 +169,7 @@ if DEBUG:
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
 
-# Social account logic for seamless login
+# Social account adapters for allauth
 SOCIALACCOUNT_ADAPTER = 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter'
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
