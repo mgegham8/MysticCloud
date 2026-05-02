@@ -1,5 +1,5 @@
 """
-URL configuration for mysticcloud project.
+URL configuration for MysticCloud project.
 """
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,24 +14,23 @@ urlpatterns = [
     path('', include('users.urls', namespace='users')),
     path('reservation/', include('reservation.urls', namespace='reservation')),
 
-    # Django-allauth URLs for social authentication (Google, Facebook, etc.)
+    # Django-allauth URLs for social authentication
     path('accounts/', include('allauth.urls')),
 
     # Password management views
     path("change-password/", auth_views.PasswordChangeView.as_view(), name="password_change"),
     path("reset-password/", auth_views.PasswordResetView.as_view(), name="reset_password"),
-    path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(),
-         name="password_reset_done"),
-    path("password-reset-confirm/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(),
-         name="password_reset_confirm"),
-    path("password-reset-complete/", auth_views.PasswordResetCompleteView.as_view(),
-         name="password_reset_complete"),
+    path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path("password-reset-confirm/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path("password-reset-complete/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 ]
 
-# Enable Debug Toolbar and Media files only during development
+# Debug mode configurations
 if settings.DEBUG:
     # Adding debug_toolbar URLs
-    urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
+    if 'debug_toolbar' in settings.INSTALLED_APPS:
+        urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
 
-    # Serving media files locally
+    # Serving static and media files locally during development
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
