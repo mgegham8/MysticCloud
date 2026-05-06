@@ -13,7 +13,6 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        # Ապահովում ենք, որ date_joined-ը միշտ լինի
         extra_fields.setdefault('date_joined', timezone.now())
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -40,7 +39,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    # ԱՅՍ ԴԱՇՏԸ ՊԱՐՏԱԴԻՐ Է
     date_joined = models.DateTimeField(default=timezone.now)
 
     objects = UserManager()
@@ -69,6 +67,5 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
-        # Օգտագործում ենք hasattr, որպեսզի սխալ չտա, եթե ինչ-որ պատճառով պրոֆիլը չկա
         if hasattr(instance, 'profile'):
             instance.profile.save()
