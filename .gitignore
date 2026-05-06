@@ -1,21 +1,43 @@
-# Python ժամանակավոր ֆայլեր
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Վիրտուալ միջավայր
+# Virtual Environment
 venv/
 env/
+ENV/
+.venv/
+.env/
 
-# Django-ի գաղտնիքներ և բազա
-.env
+# Django specific
 db.sqlite3
 db.sqlite3-journal
+/staticfiles/
+/media/
+.env
 
-# Ստատիկ և մեդիա ֆայլեր
-staticfiles/
-media/
+# Database migrations (optional)
+# */migrations/[0-9]*.py
 
-# OS-ի ֆայլեր
+# Unit test reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# OS generated files
 .DS_Store
+.DS_Store?
 Thumbs.db
+tiling-cache.bin
+
+# IDEs/Editors
+.vscode/
+.idea/
+*.swp
+*.swo
